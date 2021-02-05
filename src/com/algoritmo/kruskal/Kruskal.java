@@ -7,33 +7,49 @@ import java.util.List;
 import com.lista.adjacente.*;
 
 public class Kruskal {
-	public static void main(String[] args) {
-		List<String[]> conjuntos = new ArrayList<String[]>();
-		
-		Grafo grafo = new Grafo();
-        
-		Vertice A = grafo.addVertice("A");
-		Vertice B = grafo.addVertice("B");
-		Vertice C = grafo.addVertice("C");
-		Vertice D = grafo.addVertice("D");
-		Vertice E = grafo.addVertice("E");
-		
-	    Aresta AB = grafo.addAresta(A, B, 4);
-	    Aresta AC = grafo.addAresta(A, C, 8);
-	    Aresta CB = grafo.addAresta(C, B, 11);
-	    Aresta CD = grafo.addAresta(C, D, 9);
-	    Aresta DE = grafo.addAresta(D, E, 7);
-	    
-	    List<Vertice> listaVertices = new ArrayList<Vertice>();
-	    listaVertices.addAll(grafo.getVertices());
-	    
-	    Collections.sort(grafo.getArestas());
-	    
-	    for (Aresta aresta : grafo.getArestas()) {
-	    	String[] varAuxiliar = {aresta.getOrigem().getNome(), aresta.getDestino().getNome()};
-	    	conjuntos.add(varAuxiliar);
-	    }
-
+	private Grafo grafo;
+	private ArrayList<ArrayList<String>> conjuntos;
+	private List<Vertice> listaVertices;
+	
+	public Kruskal (Grafo grafo) {
+		this.grafo = grafo;
+		this.conjuntos = new ArrayList<ArrayList<String>>();
+		this.listaVertices = new ArrayList<Vertice>();
 	}
-
+	
+	public void iniciarAlgoritmoKruskal() {
+		this.pegarVertices();
+		this.organizarArestasOrdemCrescente();
+		
+		for (Aresta aresta : grafo.getArestas()) {
+	    	String nomeOrigem = aresta.getOrigem().getNome();
+	    	String nomeDestino = aresta.getDestino().getNome();
+	    	
+	    	this.conjuntos.forEach(subconjunto -> {
+	    	
+	    		for(int i = 0; i < subconjunto.size(); i++) {
+	    			
+	    			if(subconjunto.get(i) == nomeOrigem) {
+	    				subconjunto.add(nomeDestino);
+	    				break;
+	    			}
+	    			
+	    			if(subconjunto.get(i) == nomeDestino) {
+	    				subconjunto.add(nomeOrigem);
+	    				break;
+	    			}
+	    		}
+	    		
+	    	});
+	    }
+		
+	}
+	
+	private void pegarVertices() {
+		listaVertices.addAll(this.grafo.getVertices());
+	}
+	
+	private void organizarArestasOrdemCrescente() {
+	    Collections.sort(grafo.getArestas());
+	}
 }

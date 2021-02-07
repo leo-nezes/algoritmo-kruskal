@@ -10,11 +10,13 @@ import com.lista.adjacente.*;
 public class Kruskal {
 	private Grafo grafo;
 	private ArrayList<ArrayList<String>> conjuntos;
+	private ArrayList<String> newConjuntos;
 	private List<Vertice> listaVertices;
 	
 	public Kruskal (Grafo grafo) {
 		this.grafo = grafo;
 		this.conjuntos = new ArrayList<ArrayList<String>>();
+		this.newConjuntos = new ArrayList<String>();
 		this.listaVertices = new ArrayList<Vertice>();
 	}
 	
@@ -26,49 +28,37 @@ public class Kruskal {
 	    	String nomeOrigem = grafo.getArestas().get(i).getOrigem().getNome();
 	    	String nomeDestino = grafo.getArestas().get(i).getDestino().getNome();
 	    	
-	    	
-	    	
 	    	this.conjuntos.forEach(subconjunto -> {
 	    	
-	    		System.out.println(subconjunto.contains(nomeOrigem));
-	    		if(subconjunto.contains(nomeOrigem)) {
-    				subconjunto.add(nomeDestino);
-    				return;
-    			}
 	    		
-	    		System.out.println(subconjunto.contains(nomeDestino));
-	    		if(subconjunto.contains(nomeDestino)) {
-    				subconjunto.add(nomeOrigem);
-    				return;
-    			}
+	    		boolean isVerticeOrigemExiste = newConjuntos.contains(nomeOrigem);
+	    		boolean isVerticeDestinoExiste = newConjuntos.contains(nomeDestino);
 	    		
-	    		// ArrayList<String> novoSubgrupo = new ArrayList<>(Arrays.asList(nomeOrigem, nomeDestino));
-		    	
-		    	// this.conjuntos.add(novoSubgrupo);
+	    		if (isVerticeOrigemExiste == false && isVerticeDestinoExiste == false) {
+	    			this.newConjuntos.add(nomeDestino);
+		    		this.newConjuntos.add(nomeOrigem);
+		    		
+	    			return;
+	    		}
 	    		
-	    		/*for(int j = 0; j < subconjunto.size(); j++) {
-	    			
-	    			System.out.println(subconjunto.get(j));
-	    			
-	    			if(subconjunto.get(j) == nomeOrigem) {
-	    				subconjunto.add(nomeDestino);
-	    				break;
-	    			}
-	    			
-	    			if(subconjunto.get(j) == nomeDestino) {
-	    				subconjunto.add(nomeOrigem);
-	    				break;
-	    			}
-	    			
-	    		}*/
+	    		
+	    		if (isVerticeOrigemExiste == true && isVerticeDestinoExiste == false) {
+	    			this.newConjuntos.add(nomeDestino);
+		    		
+	    			return;
+	    		}
+	    		
+	    		if (isVerticeDestinoExiste == true && isVerticeOrigemExiste == false) {
+		    		this.newConjuntos.add(nomeOrigem);
+		    		
+	    			return;
+	    		}
 	    		
 	    	});
-	    	
-	    	// ArrayList<String> novoSubgrupo = new ArrayList<>(Arrays.asList(nomeOrigem, nomeDestino));
-	    	
-	    	// this.conjuntos.add(novoSubgrupo);
 	    }
 		
+		this.conjuntos.clear();
+		this.conjuntos.add(newConjuntos);
 	}
 	
 	private void pegarVertices() {
@@ -83,14 +73,19 @@ public class Kruskal {
 	    									grafo.getArestas().get(0).getDestino().getNome()
 	    								));
 
-	    conjuntos.add(primeiroGrupo);
+	    this.conjuntos.add(primeiroGrupo);
+
+	    this.newConjuntos.add(grafo.getArestas().get(0).getOrigem().getNome());
+	    this.newConjuntos.add(grafo.getArestas().get(0).getDestino().getNome()); 
+		
 	}
 	
 	@Override
 	public String toString() {
 		conjuntos.forEach(subconjunto -> {
-			System.out.println(subconjunto);
+			System.out.println("Conjuntos: " + subconjunto);
 		});
-		return super.toString();
+		
+		return "";
 	}
 }

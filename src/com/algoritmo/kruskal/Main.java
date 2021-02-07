@@ -23,6 +23,7 @@ public class Main {
 
 	    Kruskal kruskal = new Kruskal(grafo);
 	    kruskal.iniciarAlgoritmoKruskal();
+	    System.out.println(kruskal);
 	    
 	}
 
